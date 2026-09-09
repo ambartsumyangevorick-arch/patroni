@@ -1,0 +1,21 @@
+{
+    "bind_addr": "10.<blur>.<blur>.10",
+    "client_addr": "0.0.0.0",
+    "data_dir": "/consul/data",
+    "datacenter": "<blur>",
+    "log_level": "INFO",
+    "node_name": "pg-1c-dev-01-1d.dev.vm.<blur>",
+    "retry_join": [
+        "consul-pg-1c-dev-01-1d.dev.vm.<blur>",
+        "consul-pg-1c-dev-01-2e.dev.vm.<blur>",
+        "consul-pg-1c-dev-01-3f.dev.vm.<blur>"
+    ],
+    "server": false,
+    "telemetry": {
+        "disable_hostname": true,
+        "prometheus_retention_time": "72h"
+    },
+    "ui_config": {
+        "enabled": true
+    }
+}
