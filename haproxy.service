@@ -1,0 +1,24 @@
+[Unit]
+Requires=docker.service
+After=docker.service
+StartLimitIntervalSec=0
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm --force %N
+
+ExecStart=/usr/bin/docker run \
+  --name=%N \
+  --rm=true \
+  --network=host \
+  --stop-timeout=60 \
+  --label=co.elastic.logs/enabled=true \
+  --volume=/etc/haproxy:/usr/local/etc/haproxy:ro \
+  registry-proxy.<blur>.tech/haproxy:2.5-alpine
+ExecReload=/bin/kill -USR2 $MAINPID
+ExecStop=-/usr/bin/docker stop %N
+Restart=always
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
