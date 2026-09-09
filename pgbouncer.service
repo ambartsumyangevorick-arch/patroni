@@ -1,0 +1,23 @@
+[Unit]
+Requires=docker.service
+After=docker.service
+StartLimitIntervalSec=0
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm --force %N
+ExecStart=/usr/bin/docker run \
+--name=%N \
+--rm=true \
+--pid=host \
+--network=host \
+--stop-timeout=300 \
+--volume=/etc/pgbouncer:/etc/pgbouncer:rw \
+--volume=/run/postgresql:/run/postgresql:rw \
+registry-private.<blur>.tech/infra/docker/pgbouncer:v1.22.0
+ExecStop=-/usr/bin/docker stop %N
+Restart=always
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
