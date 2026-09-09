@@ -1,0 +1,25 @@
+[Unit]
+Requires=docker.service
+After=docker.service
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=/usr/bin/docker run \
+  --name=%N \
+  --rm=true \
+  --network=host \
+  --stop-timeout=30 \
+  --env TZ="Europe/Moscow" \
+  --env CONSUL_UID="8500" \
+  --env CONSUL_GID="8500" \
+  --volume /data/consul/data:/consul/data \
+  --volume /opt/consul/config:/consul/config \
+  registry-proxy.<blur>/hashicorp/consul:1.17.0 agent
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/usr/bin/docker stop %N
+Restart=always
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
